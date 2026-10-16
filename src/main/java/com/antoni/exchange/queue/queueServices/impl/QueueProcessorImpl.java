@@ -1,7 +1,7 @@
-package com.antoni.exchange.services.impl;
+package com.antoni.exchange.queue.queueServices.impl;
 
 import com.antoni.exchange.queue.QueueInterface;
-import com.antoni.exchange.services.QueueProcessor;
+import com.antoni.exchange.queue.queueServices.QueueProcessor;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 

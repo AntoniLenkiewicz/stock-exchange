@@ -1,8 +1,8 @@
-package com.antoni.exchange.services.impl;
+package com.antoni.exchange.queue.queueServices.impl;
 
 import com.antoni.exchange.models.Order;
 import com.antoni.exchange.queue.QueueInterface;
-import com.antoni.exchange.services.OrderProcessor;
+import com.antoni.exchange.queue.queueServices.OrderProcessor;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,4 +1,4 @@
-package com.antoni.exchange.services;
+package com.antoni.exchange.queue.queueServices;
 
 public interface QueueProcessor {
     void run();
