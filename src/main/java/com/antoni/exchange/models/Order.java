@@ -1,9 +1,15 @@
 package com.antoni.exchange.models;
 
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 
 public class Order{
+    @NotNull
     public String ticker;
+    @NotNull
     public double quantity;
     public enum OrderType {
         MARKETBUY,
@@ -12,10 +18,12 @@ public class Order{
         LIMITBUY,
         STOPBUY,
         STOPSELL,
-        BUYSTOP,
-        SELLSTOP
+        BUYSTOPLIMIT,
+        SELLSTOPLIMIT
     }
+    @NotNull
     public OrderType orderType;
+    @DecimalMin(value = "0.0", inclusive = false)
     public BigDecimal price;
 
     public Order(String ticker, double quantity, OrderType orderType, BigDecimal price){

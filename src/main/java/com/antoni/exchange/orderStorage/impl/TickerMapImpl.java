@@ -59,4 +59,8 @@ public class TickerMapImpl implements TickerMap {
     public Set<String> getAllTickers(){
         return buyOrders.keySet();
     }
+
+    public boolean isTickerPresent(String ticker) {
+        return buyOrders.get(ticker) != null;
+    }
 }

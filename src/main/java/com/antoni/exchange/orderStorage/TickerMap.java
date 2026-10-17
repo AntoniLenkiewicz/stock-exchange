@@ -21,6 +21,7 @@ public interface TickerMap {
 
     Order getLowestAsk(String ticker);
 
-    public void addTicker(String ticker);
+    void addTicker(String ticker);
 
+    boolean isTickerPresent(String ticker);
 }

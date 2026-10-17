@@ -2,7 +2,9 @@ package com.antoni.exchange.controllers;
 
 import com.antoni.exchange.models.Order;
 import com.antoni.exchange.queue.queueServices.OrderProcessor;
-import org.springframework.web.bind.annotation.GetMapping;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
@@ -15,9 +17,8 @@ public class SellController {
         this.orderProcessor = orderProcessor;
     }
 
-    @GetMapping("/sell")
-    public Order placeSellOrder(){
-        Order order = new Order("AAPL", 10.00, Order.OrderType.SELLSTOP, BigDecimal.valueOf(300.22));
+    @PostMapping("/sell")
+    public Order placeSellOrder(@RequestBody @Valid Order order){
         orderProcessor.processOrder(order);
         return order;
     }
