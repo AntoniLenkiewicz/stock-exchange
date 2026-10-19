@@ -4,6 +4,7 @@ import com.antoni.exchange.models.Order;
 import com.antoni.exchange.orderStorage.TickerMap;
 import com.antoni.exchange.queue.QueueInterface;
 import com.antoni.exchange.queue.queueServices.QueueProcessor;
+import com.antoni.exchange.writeAheadLogger.WriteAheadLogger;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +15,12 @@ public class QueueProcessorImpl implements QueueProcessor {
 
     private final TickerMap tickerMap;
 
-    public QueueProcessorImpl(QueueInterface queue, TickerMap tickerMap) {
+    private final WriteAheadLogger writeAheadLogger;
+
+    public QueueProcessorImpl(QueueInterface queue, TickerMap tickerMap, WriteAheadLogger writeAheadLogger) {
         this.queue = queue;
         this.tickerMap = tickerMap;
+        this.writeAheadLogger = writeAheadLogger;
     }
 
     @PostConstruct
@@ -25,6 +29,7 @@ public class QueueProcessorImpl implements QueueProcessor {
             while (true) {
                 try {
                     Order order = queue.takeFromQueue();
+                    writeAheadLogger.writeLog(order.toString());
                     this.addToMap(order);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -36,15 +41,15 @@ public class QueueProcessorImpl implements QueueProcessor {
     }
 
     private void addToMap(Order order) {
-        if (this.isBuyOrSell(order) == "SELL") {
+        if (this.isBuyOrSell(order).equals("SELL")) {
             tickerMap.addSellOrder(order);
-        } else if (this.isBuyOrSell(order) == "BUY") {
+        } else if (this.isBuyOrSell(order).equals("BUY")) {
             tickerMap.addBuyOrder(order);
         } else {
             return; // Code to handle wrong ordertype
         }
     }
-    public String isBuyOrSell(Order order) {
+    private String isBuyOrSell(Order order) {
         switch (order.orderType) {
             case MARKETBUY, BUYSTOPLIMIT, LIMITBUY, STOPBUY:
                 return "BUY";

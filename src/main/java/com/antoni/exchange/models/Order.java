@@ -31,6 +31,20 @@ public class Order{
         this.quantity = quantity;
         this.orderType = orderType;
         this.price = price;
+    }
 
+    @Override
+    public String toString(){
+        StringBuilder orderString = new StringBuilder();
+        orderString.append("{\"ticker:\"");
+        orderString.append(ticker);
+        orderString.append("\",\"quantity\":");
+        orderString.append(quantity);
+        orderString.append(",\"orderType\":\"");
+        orderString.append(orderType.toString());
+        orderString.append("\",\"price\":");
+        orderString.append(price.toString());
+        orderString.append("}");
+        return orderString.toString();
     }
 }
