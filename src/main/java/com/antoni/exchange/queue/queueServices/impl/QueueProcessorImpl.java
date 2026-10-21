@@ -1,6 +1,7 @@
 package com.antoni.exchange.queue.queueServices.impl;
 
 import com.antoni.exchange.models.Order;
+import com.antoni.exchange.orderMatching.MatchingBook;
 import com.antoni.exchange.orderStorage.TickerMap;
 import com.antoni.exchange.queue.QueueInterface;
 import com.antoni.exchange.queue.queueServices.QueueProcessor;
@@ -13,14 +14,14 @@ public class QueueProcessorImpl implements QueueProcessor {
     //Code to process Queue
     private final QueueInterface queue;
 
-    private final TickerMap tickerMap;
-
     private final WriteAheadLogger writeAheadLogger;
 
-    public QueueProcessorImpl(QueueInterface queue, TickerMap tickerMap, WriteAheadLogger writeAheadLogger) {
+    private final MatchingBook matchingBook;
+
+    public QueueProcessorImpl(QueueInterface queue, WriteAheadLogger writeAheadLogger, MatchingBook matchingBook) {
         this.queue = queue;
-        this.tickerMap = tickerMap;
         this.writeAheadLogger = writeAheadLogger;
+        this.matchingBook = matchingBook;
     }
 
     @PostConstruct
@@ -30,7 +31,7 @@ public class QueueProcessorImpl implements QueueProcessor {
                 try {
                     Order order = queue.takeFromQueue();
                     writeAheadLogger.writeLog(order.toString());
-                    this.addToMap(order);
+                    matchingBook.matchOrder(order);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -40,24 +41,6 @@ public class QueueProcessorImpl implements QueueProcessor {
         processor.start();
     }
 
-    private void addToMap(Order order) {
-        if (this.isBuyOrSell(order).equals("SELL")) {
-            tickerMap.addSellOrder(order);
-        } else if (this.isBuyOrSell(order).equals("BUY")) {
-            tickerMap.addBuyOrder(order);
-        } else {
-            return; // Code to handle wrong ordertype
-        }
-    }
-    private String isBuyOrSell(Order order) {
-        switch (order.orderType) {
-            case MARKETBUY, BUYSTOPLIMIT, LIMITBUY, STOPBUY:
-                return "BUY";
-            case MARKETSELL, SELLSTOPLIMIT, LIMITSELL, STOPSELL:
-                return "SELL";
-            default:
-                return "invalid ordertype";
-        }
-    }
+
 }
 
