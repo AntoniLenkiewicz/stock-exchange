@@ -23,8 +23,9 @@ public class BuyController {
     }
 
     @PostMapping("/buy")
-    public Order placeBuyOrder(@RequestBody @Valid Order order) {
+    public String placeBuyOrder(@RequestBody @Valid Order order) {
         orderProcessor.processOrder(order);
-        return order;
+        return order.toString();
+        //How to return that the order has been accepted? as the queueprocessor decides that?
     }
 }

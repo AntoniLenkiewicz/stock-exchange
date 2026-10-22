@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public class Order{
+    private static int id = 0;
+    @NotNull
+    private int orderId;
     @NotNull
     public String ticker;
     @NotNull
@@ -27,16 +30,23 @@ public class Order{
     public BigDecimal price;
 
     public Order(String ticker, double quantity, OrderType orderType, BigDecimal price){
+        this.orderId = id++;
         this.ticker = ticker;
         this.quantity = quantity;
         this.orderType = orderType;
         this.price = price;
     }
 
+    public int getOrderId(){
+        return this.orderId;
+    }
+
     @Override
     public String toString(){
         StringBuilder orderString = new StringBuilder();
-        orderString.append("{\"ticker:\"");
+        orderString.append("{\"id\"");
+        orderString.append(orderId);
+        orderString.append(",\"ticker:\"");
         orderString.append(ticker);
         orderString.append("\",\"quantity\":");
         orderString.append(quantity);
