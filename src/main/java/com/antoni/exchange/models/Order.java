@@ -24,8 +24,16 @@ public class Order{
         BUYSTOPLIMIT,
         SELLSTOPLIMIT
     }
+    public enum Status {
+        RECIEVED,
+        ACCEPTED,
+        DECLINED,
+        CANCELLED
+    }
     @NotNull
     public OrderType orderType;
+    @NotNull
+    public Status orderStatus;
     @DecimalMin(value = "0.0", inclusive = false)
     public BigDecimal price;
 
@@ -35,6 +43,11 @@ public class Order{
         this.quantity = quantity;
         this.orderType = orderType;
         this.price = price;
+        this.orderStatus = Status.RECIEVED;
+    }
+
+    public void setOrderStatus(Order.Status orderStatus){
+        this.orderStatus = orderStatus;
     }
 
     public int getOrderId(){
@@ -54,7 +67,9 @@ public class Order{
         orderString.append(orderType.toString());
         orderString.append("\",\"price\":");
         orderString.append(price.toString());
-        orderString.append("}");
+        orderString.append(", \"orderStatus\", \"");
+        orderString.append(orderStatus);
+        orderString.append("\"}");
         return orderString.toString();
     }
 }

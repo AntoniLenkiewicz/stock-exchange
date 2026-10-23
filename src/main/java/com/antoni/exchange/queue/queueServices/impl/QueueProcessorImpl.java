@@ -1,5 +1,6 @@
 package com.antoni.exchange.queue.queueServices.impl;
 
+import com.antoni.exchange.controllers.OrderUpdatePublisher;
 import com.antoni.exchange.models.Order;
 import com.antoni.exchange.orderMatching.MatchingBook;
 import com.antoni.exchange.orderStorage.TickerMap;
@@ -18,10 +19,13 @@ public class QueueProcessorImpl implements QueueProcessor {
 
     private final MatchingBook matchingBook;
 
-    public QueueProcessorImpl(QueueInterface queue, WriteAheadLogger writeAheadLogger, MatchingBook matchingBook) {
+    private final OrderUpdatePublisher orderUpdatePublisher;
+
+    public QueueProcessorImpl(QueueInterface queue, WriteAheadLogger writeAheadLogger, MatchingBook matchingBook, OrderUpdatePublisher orderUpdatePublisher) {
         this.queue = queue;
         this.writeAheadLogger = writeAheadLogger;
         this.matchingBook = matchingBook;
+        this.orderUpdatePublisher = orderUpdatePublisher;
     }
 
     @PostConstruct
@@ -31,6 +35,8 @@ public class QueueProcessorImpl implements QueueProcessor {
                 try {
                     Order order = queue.takeFromQueue();
                     writeAheadLogger.writeLog(order.toString());
+                    order.setOrderStatus(Order.Status.ACCEPTED);
+                    orderUpdatePublisher.sendOrderUpdate(order);
                     matchingBook.matchOrder(order);
                 } catch (Exception e) {
                     e.printStackTrace();

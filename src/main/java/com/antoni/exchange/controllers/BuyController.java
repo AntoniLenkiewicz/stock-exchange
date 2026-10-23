@@ -32,7 +32,7 @@ public class BuyController {
 //    }
 
     @MessageMapping("/buy")
-    @SendTo("/topic/buy")
+    @SendTo("/topic/order")
     public Order placeBuyOrder(@RequestBody @Valid Order order) {
         orderProcessor.processOrder(order);
         return order;

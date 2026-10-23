@@ -5,10 +5,7 @@ const stompClient = new StompJs.Client({
 stompClient.onConnect = (frame) => {
     setConnected(true);
     console.log('Connected: ' + frame);
-    stompClient.subscribe('/topic/sell', (response) => {
-        showMessage((response.body));
-    });
-    stompClient.subscribe('/topic/buy', (response) => {
+    stompClient.subscribe('/topic/order', (response) => {
         showMessage((response.body));
     });
 };

@@ -21,7 +21,7 @@ public class SellController {
     }
 
     @MessageMapping("/sell")
-    @SendTo("/topic/sell")
+    @SendTo("/topic/order")
     public Order placeSellOrder(@RequestBody @Valid Order order){
         orderProcessor.processOrder(order);
         return order;
