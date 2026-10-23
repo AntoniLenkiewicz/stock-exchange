@@ -1,12 +1,15 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'ws://localhost:8080/gs-guide-websocket'
+    brokerURL: 'ws://localhost:8080/stocks'
 });
 
 stompClient.onConnect = (frame) => {
     setConnected(true);
     console.log('Connected: ' + frame);
-    stompClient.subscribe('/topic/greetings', (greeting) => {
-        showGreeting(JSON.parse(greeting.body).content);
+    stompClient.subscribe('/topic/sell', (response) => {
+        showMessage((response.body));
+    });
+    stompClient.subscribe('/topic/buy', (response) => {
+        showMessage((response.body));
     });
 };
 
@@ -41,14 +44,20 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function sendName() {
+function sendSellOrder() {
     stompClient.publish({
-        destination: "/app/hello",
-        body: JSON.stringify({'name': $("#name").val()})
+        destination: "/app/sell",
+        body: JSON.stringify({'ticker':'AAPL','quantity':20.0,'orderType':'LIMITSELL','price':1000.50})
+    });
+}
+function sendBuyOrder() {
+    stompClient.publish({
+        destination: "/app/buy",
+        body: JSON.stringify({'ticker':'AAPL','quantity':20.0,'orderType':'LIMITBUY','price':1000.50})
     });
 }
 
-function showGreeting(message) {
+function showMessage(message) {
     $("#greetings").append("<tr><td>" + message + "</td></tr>");
 }
 
@@ -56,5 +65,6 @@ $(function () {
     $("form").on('submit', (e) => e.preventDefault());
     $( "#connect" ).click(() => connect());
     $( "#disconnect" ).click(() => disconnect());
-    $( "#send" ).click(() => sendName());
+    $( "#sendSellOrder").click(() => sendSellOrder());
+    $( "#sendBuyOrder" ).click(() => sendBuyOrder());
 });
