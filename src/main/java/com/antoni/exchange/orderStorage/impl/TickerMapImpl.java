@@ -18,13 +18,13 @@ public class TickerMapImpl implements TickerMap {
     //Need to add functions to get the lowest ask, highest bid etc
     public void addSellOrder(Order sellOrder){
         //Code to add order to the respective order tree
-        String ticker = sellOrder.ticker;
+        String ticker = sellOrder.getTicker();
         sellOrders.get(ticker).addOrderToTree(sellOrder);
     }
 
     public void addBuyOrder(Order buyOrder) {
         //Code to add order to the respective order tree
-        String ticker = buyOrder.ticker;
+        String ticker = buyOrder.getTicker();
         buyOrders.get(ticker).addOrderToTree(buyOrder);
     }
 
@@ -62,5 +62,12 @@ public class TickerMapImpl implements TickerMap {
 
     public boolean isTickerPresent(String ticker) {
         return buyOrders.get(ticker) != null;
+    }
+
+    public Order removeLowestAsk(String ticker) {
+        return sellOrders.get(ticker).removeMostRecentLowestAsk();
+    }
+    public Order removeHighestBid(String ticker) {
+        return buyOrders.get(ticker).removeMostRecentHighestBid();
     }
 }

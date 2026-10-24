@@ -9,14 +9,20 @@ import java.util.LinkedList;
 public class SellOrderTreeImpl extends OrderTree {
     public Order getLowestAsk(){
         //Figure out how to handle an empty tree/linkedlist
+        if (orderTree.isEmpty()) {
+            return null;
+        }
         BigDecimal lowestAsk = this.orderTree.firstKey();
         LinkedList<Order> orderList = this.orderTree.get(lowestAsk);
         return orderList.peek();
     }
 
     public Order removeMostRecentLowestAsk(){
+        if (orderTree.isEmpty()) {
+            return null;
+        }
         BigDecimal lowestAsk = this.orderTree.firstKey();
         LinkedList<Order> orderList = this.orderTree.get(lowestAsk);
-        return orderList.getFirst();
+        return orderList.pollFirst();
     }
 }

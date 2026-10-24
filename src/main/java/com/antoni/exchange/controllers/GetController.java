@@ -21,7 +21,7 @@ public class GetController {
     @GetMapping("/lowest-ask/{ticker}")
     public String getLowestAsk(@PathVariable String ticker) {
         Order order = tickerMap.getLowestAsk(ticker);
-        return order.price.toString().toUpperCase();
+        return order.getPrice().toString().toUpperCase();
     }
 
     @GetMapping("/tickers")

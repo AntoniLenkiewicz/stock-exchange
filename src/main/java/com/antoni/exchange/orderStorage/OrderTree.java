@@ -11,7 +11,7 @@ public abstract class OrderTree {
     protected SortedMap<BigDecimal, LinkedList<Order>> orderTree = new TreeMap<>();
 
     public void addOrderToTree(Order order) {
-        final BigDecimal price = order.price;
+        final BigDecimal price = order.getPrice();
         LinkedList<Order> orderList = this.orderTree.get(price);
         if (orderList == null) {
             orderList = new LinkedList<>();

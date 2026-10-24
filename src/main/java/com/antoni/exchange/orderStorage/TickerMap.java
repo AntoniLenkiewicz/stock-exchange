@@ -24,4 +24,8 @@ public interface TickerMap {
     void addTicker(String ticker);
 
     boolean isTickerPresent(String ticker);
+
+    Order removeLowestAsk(String ticker);
+
+    Order removeHighestBid(String ticker);
 }

@@ -10,14 +10,20 @@ import java.util.LinkedList;
 public class BuyOrderTreeImpl extends OrderTree {
 
     public Order getHighestBid() {
+        if (orderTree.isEmpty()) {
+            return null;
+        }
         BigDecimal highestBidPrice = this.orderTree.lastKey();
         LinkedList<Order> orderList = this.orderTree.get(highestBidPrice);
         return orderList.peek();
     }
 
     public Order removeMostRecentHighestBid() {
+        if (orderTree.isEmpty()) {
+            return null;
+        }
         BigDecimal highestBidPrice = this.orderTree.lastKey();
         LinkedList<Order> orderList = this.orderTree.get(highestBidPrice);
-        return orderList.getFirst();
+        return orderList.pollFirst();
     }
 }

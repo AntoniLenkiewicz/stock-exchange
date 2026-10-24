@@ -9,11 +9,11 @@ import java.math.BigDecimal;
 public class Order{
     private static int id = 0;
     @NotNull
-    private int orderId;
+    private final int orderId;
     @NotNull
-    public String ticker;
+    private String ticker;
     @NotNull
-    public double quantity;
+    private double quantity;
     public enum OrderType {
         MARKETBUY,
         MARKETSELL,
@@ -31,11 +31,11 @@ public class Order{
         CANCELLED
     }
     @NotNull
-    public OrderType orderType;
+    private OrderType orderType;
     @NotNull
-    public Status orderStatus;
+    private Status orderStatus;
     @DecimalMin(value = "0.0", inclusive = false)
-    public BigDecimal price;
+    private BigDecimal price;
 
     public Order(String ticker, double quantity, OrderType orderType, BigDecimal price){
         this.orderId = id++;
@@ -52,6 +52,38 @@ public class Order{
 
     public int getOrderId(){
         return this.orderId;
+    }
+
+    public double getQuantity(){
+        return this.quantity;
+    }
+
+    public String getTicker(){
+        return this.ticker;
+    }
+
+    public Status getOrderStatus() {
+        return this.orderStatus;
+    }
+
+    public OrderType getOrderType () {
+        return this.orderType;
+    }
+
+    public BigDecimal getPrice() {
+        return this.price;
+    }
+
+    public void setTicker(String ticker) {
+        this.ticker = ticker;
+    }
+
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setOrderType(OrderType orderType) {
+        this.orderType = orderType;
     }
 
     @Override
