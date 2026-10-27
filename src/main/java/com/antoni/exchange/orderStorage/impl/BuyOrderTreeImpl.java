@@ -24,6 +24,9 @@ public class BuyOrderTreeImpl extends OrderTree {
         }
         BigDecimal highestBidPrice = this.orderTree.lastKey();
         LinkedList<Order> orderList = this.orderTree.get(highestBidPrice);
+        if (orderList.size() == 1) {
+            orderTree.remove(highestBidPrice);
+        }
         return orderList.pollFirst();
     }
 }

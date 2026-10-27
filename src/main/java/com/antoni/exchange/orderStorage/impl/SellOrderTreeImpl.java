@@ -23,6 +23,9 @@ public class SellOrderTreeImpl extends OrderTree {
         }
         BigDecimal lowestAsk = this.orderTree.firstKey();
         LinkedList<Order> orderList = this.orderTree.get(lowestAsk);
+        if (orderList.size() == 1) {
+            orderTree.remove(lowestAsk);
+        }
         return orderList.pollFirst();
     }
 }
