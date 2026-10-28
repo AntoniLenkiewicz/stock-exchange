@@ -85,8 +85,6 @@ public class MatchingBookImpl implements MatchingBook {
             tickerMap.addSellOrder(order);
         } else if (this.isBuyOrSell(order).equals("BUY")) {
             tickerMap.addBuyOrder(order);
-        } else {
-            return; // Code to handle wrong ordertype
         }
     }
     private String isBuyOrSell(Order order) {

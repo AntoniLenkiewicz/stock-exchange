@@ -19,4 +19,8 @@ public abstract class OrderTree {
         orderList.add(order);
         orderTree.put(price, orderList);
     }
+
+    public boolean isEmpty() {
+        return orderTree.isEmpty();
+    }
 }

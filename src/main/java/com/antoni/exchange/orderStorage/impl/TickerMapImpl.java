@@ -11,9 +11,9 @@ import java.util.Set;
 
 @Component
 public class TickerMapImpl implements TickerMap {
-    private Map<String, BuyOrderTreeImpl> buyOrders = new HashMap<>();
+    protected Map<String, BuyOrderTreeImpl> buyOrders = new HashMap<>();
 
-    private Map<String, SellOrderTreeImpl> sellOrders = new HashMap<>();
+    protected Map<String, SellOrderTreeImpl> sellOrders = new HashMap<>();
 
     //Need to add functions to get the lowest ask, highest bid etc
     public void addSellOrder(Order sellOrder){

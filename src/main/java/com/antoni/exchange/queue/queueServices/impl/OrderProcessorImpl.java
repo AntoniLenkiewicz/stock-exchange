@@ -18,7 +18,6 @@ public class OrderProcessorImpl implements OrderProcessor {
     }
 
     public void processOrder(Order order) {
-        System.out.println("Adding Order to queue");
         try {
             if (tickerMap.isTickerPresent(order.getTicker())) {
                 queue.addToQueue(order);
@@ -26,6 +25,7 @@ public class OrderProcessorImpl implements OrderProcessor {
                 return;
             }
         } catch (InterruptedException e) {
+            //Add some better error handling
             System.out.println(e);
         }
     }
