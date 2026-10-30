@@ -37,4 +37,65 @@ class MatchingBookImplTest {
         );
     }
 
+    @Test
+    void testMatchWithHigherSellQuantityThanBuy() {
+        Order buyOrder = new Order("AAPL", 20.00, Order.OrderType.LIMITBUY, BigDecimal.valueOf(100.00));
+        Order sellOrder = new Order("AAPL", 40.00, Order.OrderType.LIMITSELL, BigDecimal.valueOf(100.00));
+        tickerMap.addTicker("AAPL");
+        tickerMap.addBuyOrder(buyOrder);
+
+        matchingBook.matchOrder(sellOrder);
+        assertAll(
+                () -> assertTrue("Buy order is still in tree", tickerMap.getBuyOrders("AAPL").isEmpty()),
+                () -> assertEquals("Sell order reference is not the same as original object", sellOrder,
+                        tickerMap.getSellOrders("AAPL").getLowestAsk())
+        );
+    }
+
+    @Test
+    void testMatchWithHigherBuyQuantityThanSell() {
+        Order buyOrder = new Order("AAPL", 40.00, Order.OrderType.LIMITBUY, BigDecimal.valueOf(100.00));
+        Order sellOrder = new Order("AAPL", 20.00, Order.OrderType.LIMITSELL, BigDecimal.valueOf(100.00));
+        tickerMap.addTicker("AAPL");
+        tickerMap.addBuyOrder(buyOrder);
+
+        matchingBook.matchOrder(sellOrder);
+        assertAll(
+                () -> assertTrue("Sell order is still in tree", tickerMap.getSellOrders("AAPL").isEmpty()),
+                () -> assertEquals("Sell order reference is not the same as original object", buyOrder,
+                        tickerMap.getBuyOrders("AAPL").getHighestBid())
+        );
+    }
+    @Test
+    void testMatchWithHigherSellPriceThanBuy() {
+        Order buyOrder = new Order("AAPL", 20.00, Order.OrderType.LIMITBUY, BigDecimal.valueOf(100.00));
+        Order sellOrder = new Order("AAPL", 20.00, Order.OrderType.LIMITSELL, BigDecimal.valueOf(200.00));
+        tickerMap.addTicker("AAPL");
+        tickerMap.addBuyOrder(buyOrder);
+
+        matchingBook.matchOrder(sellOrder);
+        assertAll(
+                () -> assertEquals("Buy order reference is not the same as original object", buyOrder,
+                        tickerMap.getBuyOrders("AAPL").getHighestBid()),
+                () -> assertEquals("Sell order reference is not the same as original object", sellOrder,
+                        tickerMap.getSellOrders("AAPL").getLowestAsk())
+        );
+    }
+
+    @Test
+    void testMatchWithHigherBuyPriceThanSell() {
+        Order buyOrder = new Order("AAPL", 20.00, Order.OrderType.LIMITBUY, BigDecimal.valueOf(200.00));
+        Order sellOrder = new Order("AAPL", 20.00, Order.OrderType.LIMITSELL, BigDecimal.valueOf(100.00));
+        tickerMap.addTicker("AAPL");
+        tickerMap.addBuyOrder(buyOrder);
+
+        matchingBook.matchOrder(sellOrder);
+        assertAll(
+                () -> assertTrue("Buy order reference is not the same as original object",
+                        tickerMap.getBuyOrders("AAPL").isEmpty()),
+                () -> assertTrue("Sell order reference is not the same as original object",
+                        tickerMap.getSellOrders("AAPL").isEmpty())
+        );
+    }
+
 }
