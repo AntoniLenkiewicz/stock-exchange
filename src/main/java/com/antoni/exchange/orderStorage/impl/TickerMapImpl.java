@@ -29,23 +29,24 @@ public class TickerMapImpl implements TickerMap {
     }
 
     public SellOrderTreeImpl getSellOrders(String ticker){
-        return sellOrders.get(ticker);
+        return sellOrders.get(ticker.toUpperCase());
     }
 
     public BuyOrderTreeImpl getBuyOrders(String ticker){
         //Code to return the respective order tree
-        return buyOrders.get(ticker);
+        return buyOrders.get(ticker.toUpperCase());
     }
 
     public Order getHighestBid(String ticker) {
-        return buyOrders.get(ticker).getHighestBid();
+        return buyOrders.get(ticker.toUpperCase()).getHighestBid();
     }
 
     public Order getLowestAsk(String ticker) {
-        return sellOrders.get(ticker).getLowestAsk();
+        return sellOrders.get(ticker.toUpperCase()).getLowestAsk();
     }
 
     public void addTicker(String ticker) {
+        ticker = ticker.toUpperCase();
         if (buyOrders.get(ticker) == null) {
             BuyOrderTreeImpl buyOrderList = new BuyOrderTreeImpl();
             buyOrders.put(ticker, buyOrderList);
@@ -61,13 +62,14 @@ public class TickerMapImpl implements TickerMap {
     }
 
     public boolean isTickerPresent(String ticker) {
+        ticker = ticker.toUpperCase();
         return buyOrders.get(ticker) != null;
     }
 
     public Order removeLowestAsk(String ticker) {
-        return sellOrders.get(ticker).removeMostRecentLowestAsk();
+        return sellOrders.get(ticker.toUpperCase()).removeMostRecentLowestAsk();
     }
     public Order removeHighestBid(String ticker) {
-        return buyOrders.get(ticker).removeMostRecentHighestBid();
+        return buyOrders.get(ticker.toUpperCase()).removeMostRecentHighestBid();
     }
 }
