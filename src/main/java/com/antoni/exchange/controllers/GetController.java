@@ -21,6 +21,18 @@ public class GetController {
     @GetMapping("/lowest-ask/{ticker}")
     public String getLowestAsk(@PathVariable String ticker) {
         Order order = tickerMap.getLowestAsk(ticker);
+        if (order == null) {
+            return "None";
+        }
+        return order.getPrice().toString().toUpperCase();
+    }
+
+    @GetMapping("/highest-bid/{ticker}")
+    public String getHighestBid(@PathVariable String ticker) {
+        Order order = tickerMap.getHighestBid(ticker);
+        if (order == null) {
+            return "None";
+        }
         return order.getPrice().toString().toUpperCase();
     }
 
