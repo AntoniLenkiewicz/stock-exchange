@@ -6,6 +6,7 @@ import com.antoni.exchange.orderStorage.impl.TickerMapImpl;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -27,8 +28,12 @@ public class ManageInit {
     }
 
     private void initTickers(){
-        tickerLoader.LoadTickers();
-        for (Ticker ticker : tickerLoader.getTicker()) {
+        try {
+            tickerLoader.LoadTickers();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        for (Ticker ticker : tickerLoader.getTickers()) {
             tickerMap.addTicker(ticker.getName());
         }
     }

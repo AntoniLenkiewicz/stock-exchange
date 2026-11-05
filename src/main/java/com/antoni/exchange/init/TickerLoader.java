@@ -26,19 +26,15 @@ public class TickerLoader {
 
     //Read tickers and add them to the map
     @Value("${ticker.file}")
-    private String tickerFile;
+    protected String tickerFile;
 
-    public void LoadTickers(){
+    public void LoadTickers() throws IOException{
         Resource resource = new ClassPathResource(tickerFile);
-        try {
-            InputStream inputStream = resource.getInputStream();
-            tickers = objectMapper.readValue(inputStream, new TypeReference<List<Ticker>>() {} );
-        } catch (IOException e) {
-            System.out.println(e);
-        }
+        InputStream inputStream = resource.getInputStream();
+        tickers = objectMapper.readValue(inputStream, new TypeReference<>() {} );
     }
 
-    public List<Ticker> getTicker() {
+    public List<Ticker> getTickers() {
         return this.tickers;
     }
 }

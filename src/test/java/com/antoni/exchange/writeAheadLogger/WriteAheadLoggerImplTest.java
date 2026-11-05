@@ -62,7 +62,7 @@ class WriteAheadLoggerImplTest {
     }
 
     @Test
-    void testWrongFilePathWhenOpeningFile() {
+    void testWrongFilePathWhenOpeningFileThrowsCorrectAssertion() {
         Path wrongPath = Paths.get("./wrongpath/wal.log");
         try {
             writeAheadLogger.openLog(wrongPath);
