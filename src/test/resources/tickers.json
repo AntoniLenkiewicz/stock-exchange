@@ -1,0 +1,82 @@
+ [
+   {
+      "id": 1,
+      "name": "AAPL"
+    },
+    {
+      "id": 2,
+      "name": "MSFT"
+    },
+    {
+      "id": 3,
+      "name": "GOOGL"
+    },
+    {
+      "id": 4,
+      "name": "AMZN"
+    },
+    {
+      "id": 5,
+      "name": "NVDA"
+    },
+    {
+      "id": 6,
+      "name": "META"
+    },
+    {
+      "id": 7,
+      "name": "TSLA"
+    },
+    {
+      "id": 8,
+      "name": "NFLX"
+    },
+    {
+      "id": 9,
+      "name": "AMD"
+    },
+    {
+      "id": 10,
+      "name": "INTC"
+    },
+    {
+      "id": 11,
+      "name": "ORCL"
+    },
+    {
+      "id": 12,
+      "name": "CRM"
+    },
+    {
+      "id": 13,
+      "name": "JPM"
+    },
+    {
+      "id": 14,
+      "name": "V"
+    },
+    {
+      "id": 15,
+      "name": "WMT"
+    },
+    {
+      "id": 16,
+      "name": "KO"
+    },
+    {
+      "id": 17,
+      "name": "DIS"
+    },
+    {
+      "id": 18,
+      "name": "UBER"
+    },
+    {
+      "id": 19,
+      "name": "COST"
+    },
+    {
+      "id": 20,
+      "name": "BA"
+    }
+ ]

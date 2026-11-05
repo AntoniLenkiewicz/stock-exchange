@@ -12,7 +12,7 @@ import java.nio.file.Path;
 public class WriteAheadLoggerImpl extends WriteAheadLogger {
 
     @Value("${app.log.path}")
-    private Path logPath;
+    protected Path logPath;
 
     @PostConstruct
     private void run (){
