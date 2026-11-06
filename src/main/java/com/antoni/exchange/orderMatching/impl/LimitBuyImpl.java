@@ -28,7 +28,7 @@ public class LimitBuyImpl extends MatchingAlgorithm {
                     tickerMap.removeLowestAsk(order.getTicker());
                     order.setQuantity(0.00);
                 } else {
-                    //The lowest ask doesnt fill the buy order completely
+                    //The lowest ask doesn't fill the buy order completely
                     order.setQuantity(order.getQuantity() - lowestAsk.getQuantity());
                     tickerMap.removeLowestAsk(order.getTicker());
                 }

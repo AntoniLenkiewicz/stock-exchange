@@ -27,7 +27,7 @@ public class LimitSellImpl extends MatchingAlgorithm {
                     tickerMap.removeHighestBid(order.getTicker());
                     order.setQuantity(0.00);
                 } else {
-                    //The highest bid doesnt buy out the sell order
+                    //The highest bid doesn't buy out the sell order
                     order.setQuantity(order.getQuantity() - highestBid.getQuantity());
                     tickerMap.removeHighestBid(order.getTicker());
                 }
