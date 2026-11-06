@@ -1,12 +1,13 @@
 package com.antoni.exchange.orderMatching;
 
 import com.antoni.exchange.models.Order;
+import com.antoni.exchange.orderMatching.impl.*;
+import com.antoni.exchange.orderStorage.TickerMap;
 import com.antoni.exchange.orderStorage.impl.TickerMapImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.util.AssertionErrors.*;
@@ -20,7 +21,11 @@ class MatchingBookImplTest {
     @BeforeEach
     void setUp() {
         tickerMap = new TickerMapImpl();
-        matchingBook = new MatchingBookImpl(tickerMap);
+        LimitSellImpl limitSell = new LimitSellImpl(tickerMap);
+        LimitBuyImpl limitBuy = new LimitBuyImpl(tickerMap);
+        MarketBuyImpl marketBuy = new MarketBuyImpl(tickerMap);
+        MarketSellImpl marketSell = new MarketSellImpl(tickerMap);
+        matchingBook = new MatchingBookImpl(limitSell, limitBuy, marketBuy, marketSell);
     }
 
     @Test
