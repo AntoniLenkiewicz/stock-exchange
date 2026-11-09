@@ -6,10 +6,10 @@ stompClient.onConnect = (frame) => {
     setConnected(true);
     console.log('Connected: ' + frame);
     stompClient.subscribe('/topic/order', (response) => {
-        showMessage((response.body));
+        showOrder((response.body));
     });
     stompClient.subscribe('/topic/receipts', (response) => {
-        showMessage((response.body));
+        showReceipt((response.body));
     });
 };
 
@@ -57,8 +57,11 @@ function sendBuyOrder() {
     });
 }
 
-function showMessage(message) {
-    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+function showReceipt(message) {
+    $("#receipts").append("<tr><td>" + message + "</td></tr>");
+}
+function showOrder(message) {
+    $("#orders").append("<tr><td>" + message + "</td></tr>");
 }
 
 $(function () {
