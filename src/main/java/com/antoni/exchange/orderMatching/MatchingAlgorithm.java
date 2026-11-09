@@ -1,13 +1,17 @@
 package com.antoni.exchange.orderMatching;
 
+import com.antoni.exchange.controllers.OrderReceiptPublisher;
 import com.antoni.exchange.models.Order;
 import com.antoni.exchange.orderStorage.TickerMap;
 
 public abstract class MatchingAlgorithm {
     protected TickerMap tickerMap;
 
-    public MatchingAlgorithm(TickerMap tickerMap) {
+    protected OrderReceiptPublisher orderRecieptPublisher;
+
+    public MatchingAlgorithm(TickerMap tickerMap, OrderReceiptPublisher orderRecieptPublisher) {
         this.tickerMap = tickerMap;
+        this.orderRecieptPublisher = orderRecieptPublisher;
     }
 
 

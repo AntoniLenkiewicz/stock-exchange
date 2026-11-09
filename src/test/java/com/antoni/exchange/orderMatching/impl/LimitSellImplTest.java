@@ -1,9 +1,14 @@
 package com.antoni.exchange.orderMatching.impl;
 
+import com.antoni.exchange.TestMessageChannel;
+import com.antoni.exchange.controllers.OrderReceiptPublisher;
 import com.antoni.exchange.models.Order;
 import com.antoni.exchange.orderStorage.impl.TickerMapImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.math.BigDecimal;
 
@@ -11,19 +16,19 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.util.AssertionErrors.assertTrue;
 
+@SpringBootConfiguration
+@SpringBootTest
 public class LimitSellImplTest {
     private TickerMapImpl tickerMap;
-
 
     private LimitSellImpl limitSell;
 
     @BeforeEach
     void setUp() {
+        SimpMessagingTemplate messagingTemplate = new SimpMessagingTemplate(new TestMessageChannel());
+        OrderReceiptPublisher orderReceiptPublisher = new OrderReceiptPublisher(messagingTemplate);
         tickerMap = new TickerMapImpl();
-        limitSell = new LimitSellImpl(tickerMap);
-        LimitBuyImpl limitBuy = new LimitBuyImpl(tickerMap);
-        MarketBuyImpl marketBuy = new MarketBuyImpl(tickerMap);
-        MarketSellImpl marketSell = new MarketSellImpl(tickerMap);
+        limitSell = new LimitSellImpl(tickerMap, orderReceiptPublisher);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.antoni.exchange.orderMatching.impl;
 
+import com.antoni.exchange.controllers.OrderReceiptPublisher;
 import com.antoni.exchange.models.Order;
 import com.antoni.exchange.orderMatching.MatchingAlgorithm;
 import com.antoni.exchange.orderStorage.TickerMap;
@@ -7,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MarketSellImpl extends MatchingAlgorithm {
-    public MarketSellImpl(TickerMap tickerMap) {
-        super(tickerMap);
+    public MarketSellImpl(TickerMap tickerMap, OrderReceiptPublisher orderReceiptPublisher) {
+        super(tickerMap, orderReceiptPublisher);
     }
 
-    //Copied from limitBuy -> needs to get looked over then tested
+    //Look over, implement recipts, fill order as available then cancel the rest
     public void matchOrder(Order order) {
         while (order.getQuantity() != 0.00) {
             Order highestBid = tickerMap.getHighestBid(order.getTicker());

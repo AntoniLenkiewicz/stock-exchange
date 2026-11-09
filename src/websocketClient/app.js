@@ -8,6 +8,9 @@ stompClient.onConnect = (frame) => {
     stompClient.subscribe('/topic/order', (response) => {
         showMessage((response.body));
     });
+    stompClient.subscribe('/topic/receipts', (response) => {
+        showMessage((response.body));
+    });
 };
 
 stompClient.onWebSocketError = (error) => {

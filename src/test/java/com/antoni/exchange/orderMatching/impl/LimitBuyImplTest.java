@@ -1,9 +1,12 @@
 package com.antoni.exchange.orderMatching.impl;
 
+import com.antoni.exchange.TestMessageChannel;
+import com.antoni.exchange.controllers.OrderReceiptPublisher;
 import com.antoni.exchange.models.Order;
 import com.antoni.exchange.orderStorage.impl.TickerMapImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.math.BigDecimal;
 
@@ -18,8 +21,10 @@ public class LimitBuyImplTest {
 
     @BeforeEach
     void setUp() {
+        SimpMessagingTemplate messagingTemplate = new SimpMessagingTemplate(new TestMessageChannel());
+        OrderReceiptPublisher orderReceiptPublisher = new OrderReceiptPublisher(messagingTemplate);
         tickerMap = new TickerMapImpl();
-        limitBuy = new LimitBuyImpl(tickerMap);
+        limitBuy = new LimitBuyImpl(tickerMap, orderReceiptPublisher);
     }
 
     @Test
