@@ -1,7 +1,6 @@
 package com.antoni.exchange.orderMatching.impl;
 
-import com.antoni.exchange.TestMessageChannel;
-import com.antoni.exchange.controllers.OrderReceiptPublisher;
+import com.antoni.exchange.TestableMessageChannel;
 import com.antoni.exchange.models.Order;
 import com.antoni.exchange.orderStorage.impl.TickerMapImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,10 +22,12 @@ public class LimitSellImplTest {
 
     private LimitSellImpl limitSell;
 
+    private TestableOrderReciptPublisher orderReceiptPublisher;
+
     @BeforeEach
     void setUp() {
-        SimpMessagingTemplate messagingTemplate = new SimpMessagingTemplate(new TestMessageChannel());
-        OrderReceiptPublisher orderReceiptPublisher = new OrderReceiptPublisher(messagingTemplate);
+        SimpMessagingTemplate messagingTemplate = new SimpMessagingTemplate(new TestableMessageChannel());
+        orderReceiptPublisher = new TestableOrderReciptPublisher(messagingTemplate);
         tickerMap = new TickerMapImpl();
         limitSell = new LimitSellImpl(tickerMap, orderReceiptPublisher);
     }
@@ -43,6 +44,8 @@ public class LimitSellImplTest {
                 () -> assertTrue("Buy order is still in tree", tickerMap.getBuyOrders("AAPL").isEmpty()),
                 () -> assertTrue("Sell order is still in tree", tickerMap.getSellOrders("AAPL").isEmpty())
         );
+        assertEquals("Receipts do not match for aligned limit sell and buy", "[{\"sellPrices\":[{\"price\":100.0,\"quantity\":20.0}]}, {\"sellPrices\":[{\"price\":100.0,\"quantity\":20.0}]}]",
+                orderReceiptPublisher.getReceipts());
     }
 
     @Test
@@ -58,6 +61,8 @@ public class LimitSellImplTest {
                 () -> assertEquals("Sell order reference is not the same as original object", sellOrder,
                         tickerMap.getSellOrders("AAPL").getLowestAsk())
         );
+        assertEquals("Receipts do not match for limit sell with higher quantity than buy", "[{\"sellPrices\":[{\"price\":100.0,\"quantity\":20.0}]}, {\"sellPrices\":[{\"price\":100.0,\"quantity\":20.0}]}]",
+                orderReceiptPublisher.getReceipts());
     }
 
     @Test
@@ -73,6 +78,8 @@ public class LimitSellImplTest {
                 () -> assertEquals("Sell order reference is not the same as original object", buyOrder,
                         tickerMap.getBuyOrders("AAPL").getHighestBid())
         );
+        assertEquals("Receipts do not match for limit sell with lower quantity than buy", "[{\"sellPrices\":[{\"price\":100.0,\"quantity\":20.0}]}, {\"sellPrices\":[{\"price\":100.0,\"quantity\":20.0}]}]",
+                orderReceiptPublisher.getReceipts());
     }
     @Test
     void testLimitSellWithHigherPriceThanBuy() {
@@ -88,6 +95,8 @@ public class LimitSellImplTest {
                 () -> assertEquals("Sell order reference is not the same as original object", sellOrder,
                         tickerMap.getSellOrders("AAPL").getLowestAsk())
         );
+        assertEquals("Receipts are not empty, for limit sell with higher price than buy", "[]",
+                orderReceiptPublisher.getReceipts());
     }
 
     @Test
@@ -104,5 +113,7 @@ public class LimitSellImplTest {
                 () -> assertTrue("Sell order reference is not the same as original object",
                         tickerMap.getSellOrders("AAPL").isEmpty())
         );
+        assertEquals("Receipts do not match for limit sell with lower price than buy", "[{\"sellPrices\":[{\"price\":100.0,\"quantity\":20.0}]}, {\"sellPrices\":[{\"price\":100.0,\"quantity\":20.0}]}]",
+                orderReceiptPublisher.getReceipts());
     }
 }

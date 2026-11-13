@@ -28,6 +28,6 @@ public class SellPrice {
     }
     @Override
     public String toString(){
-        return ("{\"price\":" + price.toString() + ",\"quantity\":" + quantity);
+        return ("{\"price\":" + price.toString() + ",\"quantity\":" + quantity + "}");
     }
 }

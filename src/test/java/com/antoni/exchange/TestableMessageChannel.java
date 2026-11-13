@@ -3,7 +3,7 @@ package com.antoni.exchange;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 
-public class TestMessageChannel implements MessageChannel {
+public class TestableMessageChannel implements MessageChannel {
 
     @Override
     public boolean send(Message<?> message) {

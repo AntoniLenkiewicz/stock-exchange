@@ -1,7 +1,6 @@
 package com.antoni.exchange.orderMatching.impl;
 
-import com.antoni.exchange.TestMessageChannel;
-import com.antoni.exchange.controllers.OrderReceiptPublisher;
+import com.antoni.exchange.TestableMessageChannel;
 import com.antoni.exchange.models.Order;
 import com.antoni.exchange.orderStorage.impl.TickerMapImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,10 +18,12 @@ public class LimitBuyImplTest {
 
     private LimitBuyImpl limitBuy;
 
+    private TestableOrderReciptPublisher orderReceiptPublisher;
+
     @BeforeEach
     void setUp() {
-        SimpMessagingTemplate messagingTemplate = new SimpMessagingTemplate(new TestMessageChannel());
-        OrderReceiptPublisher orderReceiptPublisher = new OrderReceiptPublisher(messagingTemplate);
+        SimpMessagingTemplate messagingTemplate = new SimpMessagingTemplate(new TestableMessageChannel());
+        orderReceiptPublisher = new TestableOrderReciptPublisher(messagingTemplate);
         tickerMap = new TickerMapImpl();
         limitBuy = new LimitBuyImpl(tickerMap, orderReceiptPublisher);
     }
@@ -39,6 +40,9 @@ public class LimitBuyImplTest {
                 () -> assertTrue("Buy order is still in tree", tickerMap.getBuyOrders("AAPL").isEmpty()),
                 () -> assertTrue("Sell order is still in tree", tickerMap.getSellOrders("AAPL").isEmpty())
         );
+       assertEquals("Receipts do not match for aligned limit buy and sell", "[{\"sellPrices\":[{\"price\":100.0,\"quantity\":20.0}]}, {\"sellPrices\":[{\"price\":100.0,\"quantity\":20.0}]}]",
+               orderReceiptPublisher.getReceipts());
+
     }
 
     @Test
@@ -54,6 +58,8 @@ public class LimitBuyImplTest {
                 () -> assertEquals("Sell order reference is not the same as original object", sellOrder,
                         tickerMap.getSellOrders("AAPL").getLowestAsk())
         );
+        assertEquals("Receipts do not match for limit buy with higher quantity sell", "[{\"sellPrices\":[{\"price\":100.0,\"quantity\":20.0}]}, {\"sellPrices\":[{\"price\":100.0,\"quantity\":20.0}]}]",
+                orderReceiptPublisher.getReceipts());
     }
 
     @Test
@@ -69,9 +75,11 @@ public class LimitBuyImplTest {
                 () -> assertEquals("Sell order reference is not the same as original object", buyOrder,
                         tickerMap.getBuyOrders("AAPL").getHighestBid())
         );
+        assertEquals("Receipts do not mach for limit buy with lower quantity than sell", "[{\"sellPrices\":[{\"price\":100.0,\"quantity\":20.0}]}, {\"sellPrices\":[{\"price\":100.0,\"quantity\":20.0}]}]",
+                orderReceiptPublisher.getReceipts());
     }
     @Test
-    void testLimitBuyWithHigherPriceThanSell() {
+    void testLimitBuyWithLowerPriceThanSell() {
         Order buyOrder = new Order("AAPL", 20.00, Order.OrderType.LIMITBUY, BigDecimal.valueOf(100.00));
         Order sellOrder = new Order("AAPL", 20.00, Order.OrderType.LIMITSELL, BigDecimal.valueOf(200.00));
         tickerMap.addTicker("AAPL");
@@ -84,10 +92,11 @@ public class LimitBuyImplTest {
                 () -> assertEquals("Sell order reference is not the same as original object", sellOrder,
                         tickerMap.getSellOrders("AAPL").getLowestAsk())
         );
+        assertEquals("Receipts are not empty, for limit buy with lower price than sell", "[]", orderReceiptPublisher.getReceipts());
     }
 
     @Test
-    void testLimitBuyWithLowerPriceThanSell() {
+    void testLimitBuyWithHigherPriceThanSell() {
         Order buyOrder = new Order("AAPL", 20.00, Order.OrderType.LIMITBUY, BigDecimal.valueOf(200.00));
         Order sellOrder = new Order("AAPL", 20.00, Order.OrderType.LIMITSELL, BigDecimal.valueOf(100.00));
         tickerMap.addTicker("AAPL");
@@ -100,5 +109,7 @@ public class LimitBuyImplTest {
                 () -> assertTrue("Sell order reference is not the same as original object",
                         tickerMap.getSellOrders("AAPL").isEmpty())
         );
+        assertEquals("Receipts do not mach for limit buy with higher price than sell", "[{\"sellPrices\":[{\"price\":100.0,\"quantity\":20.0}]}, {\"sellPrices\":[{\"price\":100.0,\"quantity\":20.0}]}]",
+                orderReceiptPublisher.getReceipts());
     }
 }

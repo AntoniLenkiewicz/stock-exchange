@@ -24,19 +24,20 @@ public class LimitSellImpl extends MatchingAlgorithm {
                 if (order.getQuantity() < highestBid.getQuantity()) {
                     //The highestbid wants to buy more
                     //Sell and update the highestBid
-                    SellPrice sellPrice = new SellPrice(highestBid.getPrice(), order.getQuantity());
+                    SellPrice sellPrice = new SellPrice(order.getPrice(), order.getQuantity());
                     orderReceipt.addSellPrice(sellPrice);
+                    buyerRecipt.addSellPrice(sellPrice);
                     highestBid.setQuantity(highestBid.getQuantity() - order.getQuantity());
                     order.setQuantity(0.00);
                 } else if (order.getQuantity() == highestBid.getQuantity()) {
-                    SellPrice sellPrice = new SellPrice(highestBid.getPrice(), order.getQuantity());
+                    SellPrice sellPrice = new SellPrice(order.getPrice(), order.getQuantity());
                     orderReceipt.addSellPrice(sellPrice);
                     buyerRecipt.addSellPrice(sellPrice);
                     tickerMap.removeHighestBid(order.getTicker());
                     order.setQuantity(0.00);
                 } else {
                     //The highest bid doesn't buy out the sell order
-                    SellPrice sellPrice = new SellPrice(highestBid.getPrice(), highestBid.getQuantity());
+                    SellPrice sellPrice = new SellPrice(order.getPrice(), highestBid.getQuantity());
                     orderReceipt.addSellPrice(sellPrice);
                     buyerRecipt.addSellPrice(sellPrice);
                     order.setQuantity(order.getQuantity() - highestBid.getQuantity());

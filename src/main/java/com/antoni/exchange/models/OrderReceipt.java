@@ -26,4 +26,9 @@ public class OrderReceipt {
     public List<SellPrice> getSellPrices(){
         return this.sellPrices;
     }
+
+    public String toString() {
+        String sellPricesString = ("{\"sellPrices\":" + sellPrices + "}");
+        return sellPricesString;
+    }
 }

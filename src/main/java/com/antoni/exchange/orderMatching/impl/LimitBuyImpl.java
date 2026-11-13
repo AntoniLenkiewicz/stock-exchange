@@ -28,6 +28,7 @@ public class LimitBuyImpl extends MatchingAlgorithm {
                     //Sell and update the lowestAsk
                     SellPrice sellPrice = new SellPrice(lowestAsk.getPrice(), order.getQuantity());
                     orderReceipt.addSellPrice(sellPrice);
+                    sellerRecipt.addSellPrice(sellPrice);
                     lowestAsk.setQuantity(lowestAsk.getQuantity() - order.getQuantity());
                     order.setQuantity(0.00);
                 } else if (order.getQuantity() == lowestAsk.getQuantity()) {
